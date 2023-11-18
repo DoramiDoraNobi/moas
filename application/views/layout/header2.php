@@ -87,14 +87,12 @@
             <a href="#">
                 <i class="fas fa-user"></i> Kelola Profile
             </a>
-            <a href="<?php echo site_url('katering'); ?>">
+            <a href="<?php echo site_url('pesanan'); ?>">
                 Kelola Pesanan
             </a>
             <a href="<?php echo site_url('makanan'); ?>">
             Kelola Menu Makanan
             </a>
-            <a href="<?php echo site_url('kelola_barang') ?>">
-            Kelola Barang</a>
             <a href="#">
                 <i class="fas fa-book"></i> Berlangganan
             </a>

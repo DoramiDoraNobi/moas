@@ -73,7 +73,7 @@
             
             <!-- Right Side -->
             <div class="col-md-6 right-side">
-                <img src="../assets/picture/moas.png" alt="Logo" style="max-width: 300px; max-height: 300px;">
+                <img src="<?php echo base_url('assets/picture/moas.png') ?>" alt="Logo" style="max-width: 300px; max-height: 300px;">
                 <h3>Daftar ke Moas</h3>
                 <h4>Daftar ke Moas dan mulai mencatat pesanan katering mu</h4>
             </div>

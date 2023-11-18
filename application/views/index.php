@@ -35,10 +35,10 @@
                 <a class="nav-link" href="#">Informasi</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Register</a>
+                <a class="nav-link" href="<?php echo site_url('auth/register') ?>">Register</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Login</a>
+                <a class="nav-link" href="<?php echo site_url('auth') ?>">Login</a>
             </li>
         </ul>
     </nav>

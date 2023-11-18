@@ -2,7 +2,7 @@
 
 <!-- Footer -->
 <div class="footer">
-    <p>Ini adalah footer. Hak cipta © 2023 MOAS. Dibuat dengan ❤️ oleh Tim MOAS.</p>
+    <p>Tim Moas@2023.</p>
 </div>
 
 <!-- Bootstrap JS -->

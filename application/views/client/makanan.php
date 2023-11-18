@@ -22,7 +22,7 @@
                                     <tr>
                                         <td><?php echo $key+1 ?></td>
                                         <td><?php echo $value->nama_menu ?></td>
-                                        <td><?php echo $value->harga?></td>
+                                        <td>Rp. <?php echo $value->harga?></td>
                                         <td><?php echo $value->deskripsi ?></td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editMakananModal<?php echo $value->id_menu ?>">Edit</button>
