@@ -72,17 +72,16 @@ class Pesanan extends CI_Controller
             'id_menu' => $nama_menu,
             'jumlah' => $jumlah,
             'total' => $total_harga,
-            'tanggal_pesanan' => $this->input->post('tanggal_pesanan'),
             'alamat' => $this->input->post('alamat'),
             'nohp_pemesan' => $this->input->post('nohp_pemesan'),
+            'status' => $this->input->post('status'),
             'id_katering' => $this->session->userdata('id_katering')
         );
         $this->Pesanan_model->updatePesanan($data);
         redirect('pesanan');
     }
     
-    public function do_delete(){
-        $id = $this->input->post('id_pesanan');
+    public function do_delete($id){
         $this->Pesanan_model->deletePesanan($id);
         redirect('pesanan');
     }

@@ -109,7 +109,7 @@
                                             </div>
                                             <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
-                                                <form method="post" action="<?php echo site_url('pesanan/do_delete') ?>">
+                                                <form method="post" action="<?php echo site_url('pesanan/do_delete/'.$value->id_pesanan) ?>">
                                                     <input type="hidden" name="id_menu" value="<?php echo $value->id_pesanan ?>">
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
                                                 </form>
@@ -159,6 +159,10 @@
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
                         <input type="text" class="form-control" id="alamat" name="alamat"?>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Tanggal</label>
+                        <input type="date" class="form-control" id="tanggal_pesanan" name="tanggal_pesanan"?>
                     </div>
                     <div class="form-group">
                         <label for="alamat">No Hp Pemesan</label>
