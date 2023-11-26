@@ -9,6 +9,7 @@ class Pesanan extends CI_Controller
         parent::__construct();
         $this->load->model('Pesanan_model');
         $this->load->model('Makanan_model');
+        $this->load->model('DetailPesanan_model');
     }
 
     public function index(){
@@ -20,29 +21,24 @@ class Pesanan extends CI_Controller
         $this->load->view('layout/footer');
     }
 
+    public function detailpesanan($id){
+        $data['pesanan'] = $this->Pesanan_model->getPesananById($id);
+        $data['detail_pesanan'] = $this->DetailPesanan_model->getDetailPesananbyPesananId($id);
+        $this->load->view('layout/header2');
+        $this->load->view('client/detailpesanan', $data);
+        $this->load->view('layout/footer');
+    }
+
     public function do_create(){
-        $nama_menu = $this->input->post('nama_menu');
-        $jumlah = $this->input->post('jumlah');
-    
-        // Ambil ID katering dari sesi
         $id_katering = $this->session->userdata('id_katering');
-    
-        // Ambil harga makanan dari database berdasarkan nama menu dan ID katering
-        $harga_per_menu = $this->Pesanan_model->get_harga_menu($nama_menu, $id_katering);
-    
-        // Hitung total harga pesanan
-        $total_harga = $jumlah * $harga_per_menu;
-    
-        // Buat data untuk pesanan
+
         $data = array(
             'nama_pemesan' => $this->input->post('nama_pemesan'),
-            'id_menu' => $nama_menu,
-            'jumlah' => $jumlah,
-            'total' => $total_harga,
-            'tanggal_pesanan' => $this->input->post('tanggal_pesanan'),
             'alamat' => $this->input->post('alamat'),
-            'status' => 'Proses',
             'nohp_pemesan' => $this->input->post('nohp_pemesan'),
+            'status' => $this->input->post('status'),
+            'tanggal_pesan' => date('Y-m-d H:i:s'),
+            'total' => 0,
             'id_katering' => $id_katering
         );
     
@@ -51,6 +47,8 @@ class Pesanan extends CI_Controller
     
         redirect('pesanan');
     }
+
+
 
     public function do_update(){
 
@@ -69,8 +67,6 @@ class Pesanan extends CI_Controller
         $data = array(
             'id_pesanan' => $this->input->post('id_pesanan'),
             'nama_pemesan' => $this->input->post('nama_pemesan'),
-            'id_menu' => $nama_menu,
-            'jumlah' => $jumlah,
             'total' => $total_harga,
             'alamat' => $this->input->post('alamat'),
             'nohp_pemesan' => $this->input->post('nohp_pemesan'),

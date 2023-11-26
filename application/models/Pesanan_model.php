@@ -6,37 +6,37 @@ class Pesanan_model extends CI_Model
     public function getPesananbyUserId($id)
     {
         $this->db->where('id_katering', $id);
-        $query = $this->db->get('data_pesanan');
+        $query = $this->db->get('pesanan');
         return $query->result();
     }
     public function CreatePesanan($data)
     {
-        $this->db->insert('data_pesanan', $data);
+        $this->db->insert('pesanan', $data);
         return $this->db->affected_rows();
     }
     public function getPesananById($id)
     {
         $this->db->where('id_pesanan', $id);
-        $query = $this->db->get('data_pesanan');
+        $query = $this->db->get('pesanan');
         return $query->row();
     }
     public function updatePesanan($data)
     {
         $this->db->where('id_pesanan', $data['id_pesanan']);
-        $this->db->update('data_pesanan', $data);
+        $this->db->update('pesanan', $data);
         return $this->db->affected_rows();
     }
     public function deletePesanan($id)
     {
         $this->db->where('id_pesanan', $id);
-        $this->db->delete('data_pesanan');
+        $this->db->delete('pesanan');
         return $this->db->affected_rows();
     }
     public function hitung_total($id_pesanan) {
         $this->db->select_sum('jumlah * harga', 'total');
         $this->db->from('pesanan');
         $this->db->join('menu_makanan', 'pesanan.id_menu = menu_makanan.id_menu');
-        $this->db->where('id_pesanan', $id_pesanan);
+        $this->db->where('pesanan', $id_pesanan);
         return $this->db->get()->row()->total;
     }
 
@@ -54,6 +54,13 @@ class Pesanan_model extends CI_Model
         $result = $this->db->get('menu_makanan')->row();
     
         return ($result) ? $result->nama_menu : '';
+    }
+    public function get_nama_pemesanbyId($id_pesanan) {
+        $this->db->select('nama_pemesan');
+        $this->db->where('id_pesanan', $id_pesanan);
+        $result = $this->db->get('pesanan')->row();
+    
+        return ($result) ? $result->nama_pemesan : '';
     }
     
     
