@@ -1,39 +1,39 @@
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h4>Detail Pesanan</h4>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahPesananModal">Tambah Menu Pesanan</button>
-                </div>
+                    <a href="<?php echo site_url('pesanan') ?>" class="btn btn-warning">Kembali</a>
+                    <button type="button" id="tombol-tambah-menu" class="btn btn-primary" data-toggle="modal" data-target="#tambahPesananModal">Tambah Menu Pesanan</button>
                 <div class="card-body">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama Pemesan</th>
-                                <th>Alamat</th>
                                 <th>Menu</th>
                                 <th>Jumlah</th>
+                                <th>Total Item</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($pesanan as $key => $value) { ?>
+                            <?php foreach ($detail_pesanan as $key => $value) { ?>
                                 <tr>
                                     <td><?php echo $key + 1 ?></td>
-                                    <td><?php echo $this->Pesanan_model->get_nama_pemesanbyId($value->id_pesanan);; ?></td>
-                                    <td><?php echo $value->alamat ?></td>
+                                    <td><?php echo $this->Pesanan_model->get_nama_pemesanbyId($value->id_pesanan); ?></td>
                                     <td><?php echo $this->Pesanan_model->get_nama_menu_by_id($value->id_menu); ?></td>
                                     <td><?php echo $value->jumlah ?></td>
-                                    <td>Rp. <?php echo $value->total ?></td>
+                                    <td><?php echo $value->total_per_item ?></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editPesananModal<?php echo $value->id_pesanan ?>">Edit</button>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapusPesananModal<?php echo $value->id_pesanan ?>">Hapus</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editPesananModal<?php echo $value->id_detail_pesanan ?>">Edit</button>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapusPesananModal<?php echo $value->id_detail_pesanan ?>">Hapus</button>
                                     </td>
                                 </tr>
                                 <!-- Modal Edit Pesanan -->
-                                <div class="modal fade" id="editPesananModal<?php echo $value->id_pesanan ?>" tabindex="-1" role="dialog" aria-labelledby="editPesananModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="editPesananModal<?php echo $value->id_detail_pesanan ?>" tabindex="-1" role="dialog" aria-labelledby="editPesananModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -43,18 +43,14 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form method="post" action="<?php echo site_url('pesanan/do_update/'.$value->id_pesanan) ?>">
+                                                <form method="post" action="<?php echo site_url('pesanan/do_updateDetail/'.$value->id_detail_pesanan) ?>">
                                                     <input type="hidden" name="id_pesanan" value="<?php echo $value->id_pesanan ?>">
-                                                    <input type="hidden" name="id_katering" value="<?php echo $value->id_katering ?>">
-                                                <div class="form-group">
-                                                        <label for="nama_pemesan">Nama Pemesan</label>
-                                                        <input type="text" class="form-control" id="nama_pemesan" name="nama_pemesan" value="<?php echo $value->nama_pemesan ?>">
-                                                    </div>
+                                                    <input type="hidden" name="id_detail_pesanan" value="<?php echo $value->id_detail_pesanan ?>">
                                                     <div class="form-group">
                                                         <label for="nama_makanan">Pilih Makanan</label>
                                                         <select class="form-control" id="nama_makanan" name="nama_menu">
                                                             <?php foreach ($daftar_makanan as $makanan) { ?>
-                                                                <option value="<?php echo $makanan->id_menu ?>" <?php echo ($makanan->nama_menu == $value->id_menu) ? 'selected' : '' ?>>
+                                                                <option value="<?php echo $makanan->id_menu ?>" <?php echo ($makanan->id_menu == $value->id_menu) ? 'selected' : '' ?>>
                                                                     <?php echo $makanan->nama_menu ?>
                                                                 </option>
                                                             <?php } ?>
@@ -64,21 +60,6 @@
                                                         <label for="jumlah">Jumlah</label>
                                                         <input type="text" class="form-control" id="jumlah" name="jumlah" value="<?php echo $value->jumlah ?>">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="alamat">Alamat</label>
-                                                        <input type="text" class="form-control" id="alamat" name="alamat" value="<?php echo $value->alamat ?>">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="alamat">No Hp Pemesan</label>
-                                                        <input type="text" class="form-control" id="nohp_pemesan" name="nohp_pemesan" value="<?php echo $value->nohp_pemesan ?>">
-                                                    </div>
-                                                    <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                        <select class="form-control" id="status" name="status">
-                                                            <option value="Selesai" <?php echo ($value->status == 'Selesai') ? 'selected' : '' ?>>Selesai</option>
-                                                            <option value="Proses" <?php echo ($value->status == 'Proses') ? 'selected' : '' ?>>Proses</option>
-                                                        </select>
-                                                    </div>
                                                     <!-- Tombol Simpan -->
                                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                                 </form>
@@ -87,7 +68,7 @@
                                     </div>
                                 </div>
                                 <!-- Modal Hapus Pesanan -->
-                                <div class="modal fade" id="hapusPesananModal<?php echo $value->id_pesanan ?>" tabindex="-1" role="dialog" aria-labelledby="hapusPesananModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="hapusPesananModal<?php echo $value->id_detail_pesanan ?>" tabindex="-1" role="dialog" aria-labelledby="hapusPesananModalLabel" aria-hidden="true">
                                     <!-- Isi Modal untuk Hapus Pesanan -->
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -101,25 +82,17 @@
                                                 <p>Apakah Anda yakin ingin menghapus pesanan ini?</p>
                                             </div>
                                             <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
-                                                <form method="post" action="<?php echo site_url('pesanan/do_delete/'.$value->id_pesanan) ?>">
-                                                    <input type="hidden" name="id_menu" value="<?php echo $value->id_pesanan ?>">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                                                <form method="post" action="<?php echo site_url('pesanan/do_deleteDetail/'.$value->id_detail_pesanan) ?>">
+                                                    <input type="hidden" name="id_detail_pesanan" value="<?php echo $value->id_detail_pesanan ?>">
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal Tambah Pesanan -->
+                                <!-- Modal Tambah Menu Pesanan -->
 <div class="modal fade" id="tambahPesananModal" tabindex="-1" role="dialog" aria-labelledby="tambahPesananModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -130,11 +103,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?php echo site_url('pesanan/do_create') ?>">
-                <div class="form-group">
-                        <label for="nama_pemesan">Nama Pemesan</label>
-                        <input type="text" class="form-control" id="nama_pemesan" name="nama_pemesan">
-                    </div>
+                <form method="post" action="<?php echo site_url('pesanan/do_createDetail') ?>">
+                <input type="hidden" name="id_pesanan" value="<?php echo $value->id_pesanan?>">
                     <div class="form-group">
                         <label for="nama_makanan">Pilih Makanan</label>
                         <select class="form-control" id="nama_makanan" name="nama_menu">
@@ -149,18 +119,6 @@
                         <label for="jumlah">Jumlah</label>
                         <input type="text" class="form-control" id="jumlah" name="jumlah">
                     </div>
-                    <div class="form-group">
-                        <label for="alamat">Alamat</label>
-                        <input type="text" class="form-control" id="alamat" name="alamat"?>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Tanggal</label>
-                        <input type="date" class="form-control" id="tanggal_pesanan" name="tanggal_pesanan"?>
-                    </div>
-                    <div class="form-group">
-                        <label for="alamat">No Hp Pemesan</label>
-                        <input type="text" class="form-control" id="nohp_pemesan" name="nohp_pemesan">
-                    </div>
                     <!-- Tombol Simpan -->
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
@@ -168,3 +126,13 @@
         </div>
     </div>
 </div>
+
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

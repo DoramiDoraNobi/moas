@@ -21,13 +21,20 @@ class Pesanan extends CI_Controller
         $this->load->view('layout/footer');
     }
 
-    public function detailpesanan($id){
-        $data['pesanan'] = $this->Pesanan_model->getPesananById($id);
-        $data['detail_pesanan'] = $this->DetailPesanan_model->getDetailPesananbyPesananId($id);
+
+    public function detailPesanan($id_pesanan) {
+        $id_katering = $this->session->userdata('id_katering');
+        // Panggil model atau fungsi yang dapat mengambil detail pesanan berdasarkan $id_pesanan
+        $data['detail_pesanan'] = $this->DetailPesanan_model->getDetailPesananByIdPesanan($id_pesanan);
+        $data['daftar_makanan'] = $this->Makanan_model->getMenusbyUserId($id_katering);
+
+        // Kirim data detail pesanan ke view
         $this->load->view('layout/header2');
         $this->load->view('client/detailpesanan', $data);
         $this->load->view('layout/footer');
+
     }
+
 
     public function do_create(){
         $id_katering = $this->session->userdata('id_katering');
@@ -36,9 +43,9 @@ class Pesanan extends CI_Controller
             'nama_pemesan' => $this->input->post('nama_pemesan'),
             'alamat' => $this->input->post('alamat'),
             'nohp_pemesan' => $this->input->post('nohp_pemesan'),
-            'status' => $this->input->post('status'),
-            'tanggal_pesan' => date('Y-m-d H:i:s'),
-            'total' => 0,
+            'status' => 'Proses',
+            'tanggal_pesanan' => $this->input->post('tanggal_pesanan'),
+            'total' => '0',
             'id_katering' => $id_katering
         );
     
@@ -82,7 +89,53 @@ class Pesanan extends CI_Controller
         redirect('pesanan');
     }
 
+public function do_createDetail(){
+    $id_katering = $this->session->userdata('id_katering');
+    $id_menu = $this->input->post('nama_menu');
+    $jumlah = $this->input->post('jumlah');
+    $id_pesanan = $this->input->post('id_pesanan');
+
+    $harga_per_menu = $this->Pesanan_model->get_harga_menu($id_menu, $id_katering);
+    $total_per_item = $jumlah * $harga_per_menu;
+    $data = array(
+        'id_pesanan' => $id_pesanan,
+        'id_menu' => $id_menu,
+        'jumlah' => $jumlah,
+        'total_per_item' => $total_per_item
+    );
+
+    $this->DetailPesanan_model->CreateDetailPesanan($data);
+    redirect('pesanan/detailPesanan/'.$id_pesanan);
+
+
 }
 
+public function do_updateDetail(){
+    $id_katering = $this->session->userdata('id_katering');
+    $id_menu = $this->input->post('nama_menu');
+    $jumlah = $this->input->post('jumlah');
+    $id_pesanan = $this->input->post('id_pesanan');
+    $id_detail_pesanan = $this->input->post('id_detail_pesanan');
 
-?>
+    $harga_per_menu = $this->Pesanan_model->get_harga_menu($id_menu, $id_katering);
+    $total_per_item = $jumlah * $harga_per_menu;
+    $data = array(
+        'id_detail_pesanan' => $id_detail_pesanan,
+        'id_pesanan' => $id_pesanan,
+        'id_menu' => $id_menu,
+        'jumlah' => $jumlah,
+        'total_per_item' => $total_per_item
+    );
+
+    $this->DetailPesanan_model->UpdateDetailPesanan($data);
+    redirect('pesanan/detailPesanan/'.$id_pesanan);
+
+}
+
+public function do_deleteDetail($id_detail_pesanan){
+    $id_pesanan = $this->DetailPesanan_model->GetIdPemesan($id_detail_pesanan)->id_pesanan;
+    $this->DetailPesanan_model->DeleteDetailPesanan($id_detail_pesanan);
+    redirect('pesanan/detailPesanan/'.$id_pesanan);
+}
+
+}

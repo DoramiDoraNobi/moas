@@ -31,7 +31,7 @@
                                     <td>Rp. <?php echo $value->total ?></td>
                                     <td><?php echo $value->status ?></td>
                                     <td>
-                                        <a href="<?php echo site_url('pesanan/detail/'.$value->id_pesanan) ?>" class="btn btn-primary">Detail</a>
+                                        <a href="<?php echo site_url('pesanan/detailpesanan/'.$value->id_pesanan) ?>" class="btn btn-primary">Detail</a>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editPesananModal<?php echo $value->id_pesanan ?>">Edit</button>
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapusPesananModal<?php echo $value->id_pesanan ?>">Hapus</button>
                                     </td>
@@ -119,16 +119,22 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div class="modal-body">
+                <form method="post" action="<?php echo site_url('pesanan/do_create') ?>">
+                    <div class="form-group">
+                        <label for="nama_pemesan">Nama Pemesan</label>
+                        <input type="text" class="form-control" id="nama_pemesan" name="nama_pemesan">
+                    </div>
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
-                        <input type="text" class="form-control" id="alamat" name="alamat"?>
+                        <input type="text" class="form-control" id="alamat" name="alamat">
                     </div>
                     <div class="form-group">
-                        <label for="date">Tanggal</label>
-                        <input type="date" class="form-control" id="tanggal_pesanan" name="tanggal_pesanan"?>
+                        <label for="tanggal_pesanan">Tanggal</label>
+                        <input type="date" class="form-control" id="tanggal_pesanan" name="tanggal_pesanan">
                     </div>
                     <div class="form-group">
-                        <label for="alamat">No Hp Pemesan</label>
+                        <label for="nohp_pemesan">No Hp Pemesan</label>
                         <input type="text" class="form-control" id="nohp_pemesan" name="nohp_pemesan">
                     </div>
                     <!-- Tombol Simpan -->
@@ -138,3 +144,5 @@
         </div>
     </div>
 </div>
+
+

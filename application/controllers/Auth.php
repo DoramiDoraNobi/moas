@@ -6,6 +6,7 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Auth_model');
+        $this->load->model('Pendapatan_model'); // Memuat model Pesanan_model
     }
 
     public function index() {
@@ -16,7 +17,31 @@ class Auth extends CI_Controller
         $this->load->view('client/register');
     }
     public function dashboard() {
-        $this->load->view('client/dashboard');
+        $id_katering = $this->session->userdata('id_katering'); // Mengambil ID katering dari session atau atribut lain yang sesuai
+       // Mengambil total pendapatan keseluruhan
+       $total_pendapatan = $this->Pendapatan_model->hitungTotalPendapatan($id_katering);
+
+       // Mendapatkan total pendapatan bulan tertentu
+       $bulan = $this->input->post('bulan'); // Mengambil bulan dari form
+       $tahun = $this->input->post('tahun'); // Mengambil tahun dari form
+
+       if ($bulan && $tahun) {
+           $total_pendapatan_bulan = $this->Pendapatan_model->hitungTotalPendapatanBulan($id_katering, $tahun, $bulan);
+       } else {
+           // Jika tidak ada bulan dan tahun yang diberikan, tampilkan total pendapatan bulan ini
+           $bulan = date('M');
+           $tahun = date('Y');
+           $total_pendapatan_bulan = $this->Pendapatan_model->hitungTotalPendapatanBulan($id_katering, $tahun, $bulan);
+       }
+
+       // Data yang akan dikirimkan ke view
+       $data['total_pendapatan'] = $total_pendapatan;
+       $data['total_pendapatan_bulan'] = $total_pendapatan_bulan;
+       $data['bulan'] = $bulan;
+       $data['tahun'] = $tahun;
+
+       // Load view
+       $this->load->view('client/dashboard', $data);
     }
 
     public function do_login() {
