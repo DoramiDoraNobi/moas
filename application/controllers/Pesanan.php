@@ -36,22 +36,38 @@ class Pesanan extends CI_Controller
     }
 
 
-    public function do_create(){
+    public function do_create() {
         $id_katering = $this->session->userdata('id_katering');
+        $this->load->model('Pesanan_model');
+        $this->load->model('Pembayaran_model');
 
-        $data = array(
-            'nama_pemesan' => $this->input->post('nama_pemesan'),
-            'alamat' => $this->input->post('alamat'),
-            'nohp_pemesan' => $this->input->post('nohp_pemesan'),
-            'status' => 'Proses',
-            'tanggal_pesanan' => $this->input->post('tanggal_pesanan'),
-            'total' => '0',
-            'id_katering' => $id_katering
-        );
-    
-        // Tambahkan pesanan ke dalam database
-        $this->Pesanan_model->CreatePesanan($data);
-    
+        $maxLimit = 50; // Jumlah maksimal data pesanan jika tidak berlangganan
+        if ($this->Pembayaran_model->cekLangganan($id_katering)) {
+            // Jika berlangganan, batasan maksimal menjadi 100
+            $maxLimit = 100;
+        }
+
+        // Periksa jumlah pesanan saat ini
+        $jumlahPesanan = $this->Pesanan_model->hitungJumlahPesanan($id_katering);
+
+        if ($jumlahPesanan < $maxLimit) {
+            $data = array(
+                'nama_pemesan' => $this->input->post('nama_pemesan'),
+                'alamat' => $this->input->post('alamat'),
+                'nohp_pemesan' => $this->input->post('nohp_pemesan'),
+                'status' => 'Proses',
+                'tanggal_pesanan' => $this->input->post('tanggal_pesanan'),
+                'total' => '0',
+                'id_katering' => $id_katering
+            );
+        
+            // Tambahkan pesanan ke dalam database
+            $this->Pesanan_model->CreatePesanan($data);
+        } else {
+            // Jika sudah mencapai batas, tampilkan pesan kesalahan
+            echo "Anda telah mencapai batas maksimal pesanan.";
+        }
+
         redirect('pesanan');
     }
 

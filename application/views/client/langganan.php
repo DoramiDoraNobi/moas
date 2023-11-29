@@ -14,7 +14,7 @@
                     </ul>
 
                     <!-- Form untuk mengunggah bukti pembayaran -->
-                    <form method="post" action="<?php echo site_url('nama_controller/submit_pembayaran'); ?>" enctype="multipart/form-data">
+                    <form method="post" action="<?php echo site_url('auth/submit_pembayaran'); ?>" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="bukti_pembayaran">Unggah Bukti Pembayaran (Foto)</label>
                             <input type="file" class="form-control-file" id="bukti_pembayaran" name="bukti_pembayaran">

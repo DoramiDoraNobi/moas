@@ -38,6 +38,12 @@ class Makanan_model extends CI_Model
         $this->db->delete('menu_makanan');
         return $this->db->affected_rows();
     }
+    public function hitungJumlahMenu($id_katering) {
+        // Menghitung jumlah menu berdasarkan ID katering
+        $this->db->where('id_katering', $id_katering);
+        $query = $this->db->get('makanan');
+        return $query->num_rows(); // Mengembalikan jumlah menu
+    }
 }
 
 ?>

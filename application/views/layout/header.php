@@ -90,7 +90,7 @@
             <a href="<?php echo site_url('katering') ?>">
                 Kelola Katering
             </a>
-            <a href="#">
+            <a href="<?php echo site_url('pembayaran') ?>">
                 <i class="fas fa-book"></i> Kelola Berlangganan
             </a>
             <a href="<?php echo site_url('admin/logout');?>">

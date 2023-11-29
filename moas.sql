@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 29, 2023 at 02:34 PM
+-- Generation Time: Nov 29, 2023 at 06:32 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -133,7 +133,8 @@ INSERT INTO `katering` (`id_katering`, `nama_katering`, `email`, `nohp_katering`
 (1, 'john1', 'john1@test.com', '1313332', 'john1', 'john1'),
 (3, 'john2', 'john2@test.com', '32131', 'john2', 'john2'),
 (4, 'test5', 'test5@test.com', '533954', 'test5', 'test5'),
-(5, 'test', 'test@test.com', '2432432', 'test', 'test');
+(5, 'test', 'test@test.com', '2432432', 'test', 'test'),
+(6, 'admin', 'admin@admin.com', '43434343', 'admin', 'admin');
 
 -- --------------------------------------------------------
 
@@ -143,12 +144,31 @@ INSERT INTO `katering` (`id_katering`, `nama_katering`, `email`, `nohp_katering`
 
 CREATE TABLE `konfirmasi_pembayaran` (
   `id_konfirmasi` int NOT NULL,
-  `bukti` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `bukti` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `status_bayar` enum('Sudah','Belum') COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal_pembayaran` date NOT NULL,
-  `id_langganan` int NOT NULL,
   `id_katering` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `konfirmasi_pembayaran`
+--
+
+INSERT INTO `konfirmasi_pembayaran` (`id_konfirmasi`, `bukti`, `status_bayar`, `tanggal_pembayaran`, `id_katering`) VALUES
+(1, 'b7fa7a59b8f06c7b0d5f630ec88bf895.jpg', 'Sudah', '2023-11-29', 1);
+
+--
+-- Triggers `konfirmasi_pembayaran`
+--
+DELIMITER $$
+CREATE TRIGGER `after_pembayaran_approved` AFTER UPDATE ON `konfirmasi_pembayaran` FOR EACH ROW BEGIN
+    IF NEW.status_bayar = 'Sudah' THEN
+        INSERT INTO langganan (id_katering, tanggal_mulai, tanggal_selesai)
+        VALUES (NEW.id_katering, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY));
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -159,9 +179,31 @@ CREATE TABLE `konfirmasi_pembayaran` (
 CREATE TABLE `langganan` (
   `id_langganan` int NOT NULL,
   `id_katering` int NOT NULL,
-  `tanggal_mulai` date NOT NULL,
-  `status` enum('Akif','Tidak') COLLATE utf8mb4_general_ci NOT NULL
+  `tanggal_mulai` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tanggal_selesai` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `langganan`
+--
+
+INSERT INTO `langganan` (`id_langganan`, `id_katering`, `tanggal_mulai`, `tanggal_selesai`) VALUES
+(2, 1, '2023-11-30 01:18:47', '2023-12-30 01:18:47');
+
+--
+-- Triggers `langganan`
+--
+DELIMITER $$
+CREATE TRIGGER `hapus_langganan` AFTER INSERT ON `langganan` FOR EACH ROW BEGIN
+    -- Menghitung waktu penghapusan
+    SET @tanggal_hapus = DATE_ADD(NEW.tanggal_mulai, INTERVAL 30 DAY);
+
+    -- Menyimpan data penghapusan ke dalam tabel terpisah
+    INSERT INTO penghapusan_langganan (id_langganan, tanggal_penghapusan)
+    VALUES (NEW.id_langganan, @tanggal_hapus);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -186,7 +228,8 @@ INSERT INTO `menu_makanan` (`id_menu`, `id_katering`, `nama_menu`, `harga`, `des
 (2, 1, 'Ikan Pindang Mak Limak Sempurna', '20000.00', 'Makanan khas mak lima biadap', '2023-11-15 12:01:29'),
 (3, 4, 'Ikan Pindang', '25000.00', 'Ikan Pindang', '2023-11-16 04:18:09'),
 (4, 5, 'Ikan Salmon', '15000.00', 'Ikan segar khas jepang', '2023-11-22 02:51:53'),
-(5, 1, 'Ikan Salmon', '15000.00', 'Ikan segar khas jepang', '2023-11-26 15:47:28');
+(5, 1, 'Ikan Salmon', '15000.00', 'Ikan segar khas jepang', '2023-11-26 15:47:28'),
+(6, 6, 'dummy', '0.00', 'Dummy Data', '2023-11-29 17:15:58');
 
 -- --------------------------------------------------------
 
@@ -201,6 +244,25 @@ CREATE TABLE `pendapatan` (
   `tanggal` date NOT NULL,
   `id_katering` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `penghapusan_langganan`
+--
+
+CREATE TABLE `penghapusan_langganan` (
+  `id_penghapusan` int NOT NULL,
+  `id_langganan` int DEFAULT NULL,
+  `tanggal_penghapusan` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `penghapusan_langganan`
+--
+
+INSERT INTO `penghapusan_langganan` (`id_penghapusan`, `id_langganan`, `tanggal_penghapusan`) VALUES
+(1, 2, '2023-12-30');
 
 -- --------------------------------------------------------
 
@@ -257,7 +319,6 @@ ALTER TABLE `katering`
 --
 ALTER TABLE `konfirmasi_pembayaran`
   ADD PRIMARY KEY (`id_konfirmasi`),
-  ADD KEY `id_langganan` (`id_langganan`),
   ADD KEY `id_katering` (`id_katering`);
 
 --
@@ -280,6 +341,13 @@ ALTER TABLE `menu_makanan`
 ALTER TABLE `pendapatan`
   ADD PRIMARY KEY (`id_pendapatan`),
   ADD KEY `id_katering` (`id_katering`);
+
+--
+-- Indexes for table `penghapusan_langganan`
+--
+ALTER TABLE `penghapusan_langganan`
+  ADD PRIMARY KEY (`id_penghapusan`),
+  ADD KEY `id_langganan` (`id_langganan`);
 
 --
 -- Indexes for table `pesanan`
@@ -308,31 +376,37 @@ ALTER TABLE `detail_pesanan`
 -- AUTO_INCREMENT for table `katering`
 --
 ALTER TABLE `katering`
-  MODIFY `id_katering` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_katering` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `konfirmasi_pembayaran`
 --
 ALTER TABLE `konfirmasi_pembayaran`
-  MODIFY `id_konfirmasi` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_konfirmasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `langganan`
 --
 ALTER TABLE `langganan`
-  MODIFY `id_langganan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_langganan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menu_makanan`
 --
 ALTER TABLE `menu_makanan`
-  MODIFY `id_menu` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_menu` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pendapatan`
 --
 ALTER TABLE `pendapatan`
   MODIFY `id_pendapatan` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `penghapusan_langganan`
+--
+ALTER TABLE `penghapusan_langganan`
+  MODIFY `id_penghapusan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `pesanan`
@@ -355,8 +429,7 @@ ALTER TABLE `detail_pesanan`
 -- Constraints for table `konfirmasi_pembayaran`
 --
 ALTER TABLE `konfirmasi_pembayaran`
-  ADD CONSTRAINT `konfirmasi_pembayaran_ibfk_1` FOREIGN KEY (`id_katering`) REFERENCES `katering` (`id_katering`),
-  ADD CONSTRAINT `konfirmasi_pembayaran_ibfk_2` FOREIGN KEY (`id_langganan`) REFERENCES `langganan` (`id_langganan`);
+  ADD CONSTRAINT `konfirmasi_pembayaran_ibfk_1` FOREIGN KEY (`id_katering`) REFERENCES `katering` (`id_katering`);
 
 --
 -- Constraints for table `langganan`
@@ -375,6 +448,12 @@ ALTER TABLE `menu_makanan`
 --
 ALTER TABLE `pendapatan`
   ADD CONSTRAINT `pendapatan_ibfk_1` FOREIGN KEY (`id_katering`) REFERENCES `katering` (`id_katering`);
+
+--
+-- Constraints for table `penghapusan_langganan`
+--
+ALTER TABLE `penghapusan_langganan`
+  ADD CONSTRAINT `penghapusan_langganan_ibfk_1` FOREIGN KEY (`id_langganan`) REFERENCES `langganan` (`id_langganan`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pesanan`

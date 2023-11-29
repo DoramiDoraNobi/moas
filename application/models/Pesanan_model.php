@@ -62,6 +62,12 @@ class Pesanan_model extends CI_Model
     
         return ($result) ? $result->nama_pemesan : '';
     }
+    public function hitungJumlahPesanan($id_katering) {
+        $this->db->where('id_katering', $id_katering);
+        $query = $this->db->get('pesanan');
+
+        return $query->num_rows();
+    }
     
     
 }

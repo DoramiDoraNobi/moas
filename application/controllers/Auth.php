@@ -108,6 +108,44 @@ class Auth extends CI_Controller
     public function langganan() {
         $this->load->view('client/langganan');
     }
-}
+    
+    public function submit_pembayaran() {
+        // Konfigurasi upload
+        $config['upload_path']   = './assets/konfirmasi/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size']      = 2048; // Ukuran maksimal dalam kilobyte (KB)
+        $config['encrypt_name']  = TRUE; // Mengenkripsi nama file
 
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('bukti_pembayaran')) {
+            // Gagal unggah, kembalikan pesan error
+            $error = array('error' => $this->upload->display_errors());
+            $this->load->view('berlangganan', $error);
+        } else {
+            // Berhasil unggah, simpan nama file ke database
+            $data = array('upload_data' => $this->upload->data());
+
+            // Data untuk disimpan ke database
+            $file_name = $data['upload_data']['file_name']; // Nama file yang diupload
+            $id_katering = $this->session->userdata('id_katering'); // ID katering dari
+
+            // Data yang akan disimpan ke database
+            $data_to_store = array(
+                'bukti' => $file_name,
+                'status_bayar' => 'Belum', // Status pembayaran default
+                'tanggal_pembayaran' => date('Y-m-d'), // Tanggal pembayaran saat ini
+                'id_katering' => $id_katering // ID katering yang login
+            );
+
+            // Simpan data ke model atau database Anda sesuai kebutuhan
+            $this->load->model('Pembayaran_model');
+            $this->Pembayaran_model->InsertKonfirmasiPembayaran($data_to_store);
+
+            //kembali ke halaman dashboard dengan notifikasi
+            $this->session->set_flashdata('success', 'Pembayaran berhasil');
+            redirect('auth/dashboard');
+        }
+    }
+}
 ?>

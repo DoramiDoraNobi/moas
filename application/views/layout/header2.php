@@ -84,17 +84,14 @@
             <a>MOAS</a>
         </div>
         <div class="sidebar-links">
-            <a href="#">
-                <i class="fas fa-user"></i> Kelola Profile
-            </a>
             <a href="<?php echo site_url('pesanan'); ?>">
                 Kelola Pesanan
             </a>
             <a href="<?php echo site_url('makanan'); ?>">
             Kelola Menu Makanan
             </a>
-            <a href="#">
-                <i class="fas fa-book"></i> Berlangganan
+            <a href="<?php echo site_url('auth/langganan'); ?>">
+               Berlangganan
             </a>
             <a href="<?php echo site_url('auth/logout');?>">
                 <i class="fas fa-sign-out-alt"></i> Logout
