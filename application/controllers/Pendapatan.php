@@ -29,16 +29,7 @@ class Pendapatan extends CI_Controller {
 
     // Controller Anda
 public function totalPendapatan() {
-    $id_katering = $this->session->userdata('id_katering'); // Mengambil ID katering dari session atau atribut lain yang sesuai
-    $tahun = date('Y'); // Ambil tahun saat ini
-    $bulan = date('m'); // Ambil bulan saat ini
-
-    $this->load->model('Pesanan_model'); // Memuat model Pesanan_model
-    $data['total_pendapatan'] = $this->Pesanan_model->hitungTotalPendapatan($id_katering);
-    $data['total_pendapatan_bulan'] = $this->Pesanan_model->hitungTotalPendapatanBulan($id_katering, $tahun, $bulan);
-
-    // Tampilkan view dengan total pendapatan dan total pendapatan bulanan
-    $this->load->view('nama_view', $data); // Ganti 'nama_view' dengan nama view Anda
+   
 }
 
 }
