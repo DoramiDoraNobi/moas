@@ -104,6 +104,10 @@ class Auth extends CI_Controller
         $this->session->unset_userdata('user_logged_in');
         redirect('auth');
     }
+
+    public function langganan() {
+        $this->load->view('client/langganan');
+    }
 }
 
 ?>
