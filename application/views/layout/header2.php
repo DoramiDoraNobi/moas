@@ -90,6 +90,9 @@
             <a href="<?php echo site_url('makanan'); ?>">
             Kelola Menu Makanan
             </a>
+            <a href="<?php echo site_url('pendapatan'); ?>">
+            Pendapatan
+            </a>
             <a href="<?php echo site_url('auth/langganan'); ?>">
                Berlangganan
             </a>

@@ -62,6 +62,8 @@ class DetailPesanan_model extends CI_Model
         $this->db->delete('detail_pesanan');
     }
 
+   
+
 
 }
     

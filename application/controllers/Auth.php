@@ -121,7 +121,7 @@ class Auth extends CI_Controller
         if (!$this->upload->do_upload('bukti_pembayaran')) {
             // Gagal unggah, kembalikan pesan error
             $error = array('error' => $this->upload->display_errors());
-            $this->load->view('berlangganan', $error);
+            $this->load->view('auth/dashboard', $error);
         } else {
             // Berhasil unggah, simpan nama file ke database
             $data = array('upload_data' => $this->upload->data());

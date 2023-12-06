@@ -25,6 +25,7 @@ class Pesanan extends CI_Controller
     public function detailPesanan($id_pesanan) {
         $id_katering = $this->session->userdata('id_katering');
         // Panggil model atau fungsi yang dapat mengambil detail pesanan berdasarkan $id_pesanan
+        $data['pesanan'] = $this->Pesanan_model->getPesananbyId($id_pesanan);
         $data['detail_pesanan'] = $this->DetailPesanan_model->getDetailPesananByIdPesanan($id_pesanan);
         $data['daftar_makanan'] = $this->Makanan_model->getMenusbyUserId($id_katering);
 
@@ -105,11 +106,10 @@ class Pesanan extends CI_Controller
         redirect('pesanan');
     }
 
-public function do_createDetail(){
+public function do_createDetail($id_pesanan){
     $id_katering = $this->session->userdata('id_katering');
     $id_menu = $this->input->post('nama_menu');
     $jumlah = $this->input->post('jumlah');
-    $id_pesanan = $this->input->post('id_pesanan');
 
     $harga_per_menu = $this->Pesanan_model->get_harga_menu($id_menu, $id_katering);
     $total_per_item = $jumlah * $harga_per_menu;
@@ -153,5 +153,7 @@ public function do_deleteDetail($id_detail_pesanan){
     $this->DetailPesanan_model->DeleteDetailPesanan($id_detail_pesanan);
     redirect('pesanan/detailPesanan/'.$id_pesanan);
 }
+
+
 
 }

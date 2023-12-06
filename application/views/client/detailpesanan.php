@@ -4,9 +4,28 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+
+                <form method="post" action="<?php echo site_url('pesanan/do_createDetail/'.$pesanan->id_pesanan) ?>">
+                    <div class="form-group">
+                        <label for="nama_makanan">Pilih Makanan</label>
+                        <select class="form-control" id="nama_makanan" name="nama_menu">
+                            <?php foreach ($daftar_makanan as $makanan) { ?>
+                                <option value="<?php echo $makanan->id_menu ?>">
+                                    <?php echo $makanan->nama_menu ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jumlah">Jumlah</label>
+                        <input type="text" class="form-control" id="jumlah" name="jumlah">
+                    </div>
+                    <!-- Tombol Simpan -->
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+
                     <h4>Detail Pesanan</h4>
                     <a href="<?php echo site_url('pesanan') ?>" class="btn btn-warning">Kembali</a>
-                    <button type="button" id="tombol-tambah-menu" class="btn btn-primary" data-toggle="modal" data-target="#tambahPesananModal">Tambah Menu Pesanan</button>
                 <div class="card-body">
                     <table class="table table-striped">
                         <thead>
@@ -91,42 +110,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Modal Tambah Menu Pesanan -->
-<div class="modal fade" id="tambahPesananModal" tabindex="-1" role="dialog" aria-labelledby="tambahPesananModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tambahPesananModalLabel">Tambah Pesanan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="<?php echo site_url('pesanan/do_createDetail') ?>">
-                <input type="hidden" name="id_pesanan" value="<?php echo $value->id_pesanan?>">
-                    <div class="form-group">
-                        <label for="nama_makanan">Pilih Makanan</label>
-                        <select class="form-control" id="nama_makanan" name="nama_menu">
-                            <?php foreach ($daftar_makanan as $makanan) { ?>
-                                <option value="<?php echo $makanan->id_menu ?>">
-                                    <?php echo $makanan->nama_menu ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="jumlah">Jumlah</label>
-                        <input type="text" class="form-control" id="jumlah" name="jumlah">
-                    </div>
-                    <!-- Tombol Simpan -->
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
                             <?php } ?>
                         </tbody>
                     </table>
@@ -136,3 +119,4 @@
     </div>
 </div>
 
+  

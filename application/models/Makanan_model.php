@@ -44,6 +44,7 @@ class Makanan_model extends CI_Model
         $query = $this->db->get('makanan');
         return $query->num_rows(); // Mengembalikan jumlah menu
     }
+    
 }
 
 ?>

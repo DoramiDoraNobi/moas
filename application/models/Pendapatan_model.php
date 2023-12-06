@@ -42,6 +42,25 @@ class Pendapatan_model extends CI_Model {
         return $query->row()->total;
     }
 
+    public function getPendapatanByBulanTahun($bulan, $tahun) {
+        $this->db->select('tanggal_pesanan, SUM(total) as total_pendapatan');
+        $this->db->from('pesanan');
+        $this->db->where('MONTH(tanggal_pesanan)', $bulan);
+        $this->db->where('YEAR(tanggal_pesanan)', $tahun);
+        $this->db->group_by('tanggal_pesanan');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
+    public function getPesananByBulanTahun($bulan, $tahun) {
+        $this->db->select('*');
+        $this->db->from('pesanan');
+        $this->db->where('MONTH(tanggal_pesanan)', $bulan);
+        $this->db->where('YEAR(tanggal_pesanan)', $tahun);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
 
 }
 
