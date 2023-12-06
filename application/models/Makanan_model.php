@@ -41,7 +41,7 @@ class Makanan_model extends CI_Model
     public function hitungJumlahMenu($id_katering) {
         // Menghitung jumlah menu berdasarkan ID katering
         $this->db->where('id_katering', $id_katering);
-        $query = $this->db->get('makanan');
+        $query = $this->db->get('menu_makanan');
         return $query->num_rows(); // Mengembalikan jumlah menu
     }
     
