@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 29, 2023 at 06:32 PM
+-- Generation Time: Dec 06, 2023 at 12:43 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `moas`
 --
+CREATE DATABASE IF NOT EXISTS `moas` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `moas`;
 
 -- --------------------------------------------------------
 
@@ -62,7 +64,9 @@ CREATE TABLE `detail_pesanan` (
 INSERT INTO `detail_pesanan` (`id_detail_pesanan`, `id_pesanan`, `id_menu`, `jumlah`, `total_per_item`) VALUES
 (15, 2, 2, 55, '1100000.00'),
 (16, 2, 5, 15, '225000.00'),
-(17, 2, 5, 30, '450000.00');
+(17, 2, 5, 30, '450000.00'),
+(18, 3, 2, 12, '240000.00'),
+(19, 3, 5, 24, '360000.00');
 
 --
 -- Triggers `detail_pesanan`
@@ -134,7 +138,9 @@ INSERT INTO `katering` (`id_katering`, `nama_katering`, `email`, `nohp_katering`
 (3, 'john2', 'john2@test.com', '32131', 'john2', 'john2'),
 (4, 'test5', 'test5@test.com', '533954', 'test5', 'test5'),
 (5, 'test', 'test@test.com', '2432432', 'test', 'test'),
-(6, 'admin', 'admin@admin.com', '43434343', 'admin', 'admin');
+(6, 'admin', 'admin@admin.com', '43434343', 'admin', 'admin'),
+(7, 'test9', 'test9@test.com', '32423423546', 'test9', 'test9'),
+(8, 'Masbro', 'Masbro@test.com', '0233235325', 'Masbro', 'Masbro');
 
 -- --------------------------------------------------------
 
@@ -155,7 +161,8 @@ CREATE TABLE `konfirmasi_pembayaran` (
 --
 
 INSERT INTO `konfirmasi_pembayaran` (`id_konfirmasi`, `bukti`, `status_bayar`, `tanggal_pembayaran`, `id_katering`) VALUES
-(1, 'b7fa7a59b8f06c7b0d5f630ec88bf895.jpg', 'Sudah', '2023-11-29', 1);
+(1, 'b7fa7a59b8f06c7b0d5f630ec88bf895.jpg', 'Sudah', '2023-11-29', 1),
+(2, 'ad1de4f0194ee99ca803ca9ca8aef99b.jpg', 'Sudah', '2023-12-04', 7);
 
 --
 -- Triggers `konfirmasi_pembayaran`
@@ -188,7 +195,8 @@ CREATE TABLE `langganan` (
 --
 
 INSERT INTO `langganan` (`id_langganan`, `id_katering`, `tanggal_mulai`, `tanggal_selesai`) VALUES
-(2, 1, '2023-11-30 01:18:47', '2023-12-30 01:18:47');
+(2, 1, '2023-11-30 01:18:47', '2023-12-30 01:18:47'),
+(3, 7, '2023-12-04 12:38:31', '2024-01-03 12:38:31');
 
 --
 -- Triggers `langganan`
@@ -229,7 +237,8 @@ INSERT INTO `menu_makanan` (`id_menu`, `id_katering`, `nama_menu`, `harga`, `des
 (3, 4, 'Ikan Pindang', '25000.00', 'Ikan Pindang', '2023-11-16 04:18:09'),
 (4, 5, 'Ikan Salmon', '15000.00', 'Ikan segar khas jepang', '2023-11-22 02:51:53'),
 (5, 1, 'Ikan Salmon', '15000.00', 'Ikan segar khas jepang', '2023-11-26 15:47:28'),
-(6, 6, 'dummy', '0.00', 'Dummy Data', '2023-11-29 17:15:58');
+(6, 6, 'dummy', '0.00', 'Dummy Data', '2023-11-29 17:15:58'),
+(7, 8, 'Kepiting Rebus cak Rama', '75000.00', 'Kepiting Rebus cak Rama asli China', '2023-12-06 12:38:27');
 
 -- --------------------------------------------------------
 
@@ -262,7 +271,8 @@ CREATE TABLE `penghapusan_langganan` (
 --
 
 INSERT INTO `penghapusan_langganan` (`id_penghapusan`, `id_langganan`, `tanggal_penghapusan`) VALUES
-(1, 2, '2023-12-30');
+(1, 2, '2023-12-30'),
+(2, 3, '2024-01-03');
 
 -- --------------------------------------------------------
 
@@ -288,7 +298,7 @@ CREATE TABLE `pesanan` (
 INSERT INTO `pesanan` (`id_pesanan`, `nama_pemesan`, `nohp_pemesan`, `alamat`, `tanggal_pesanan`, `total`, `status`, `id_katering`) VALUES
 (1, 'John Doe', '123456789', 'Alamatnya John Doe', '2023-11-22', 50000, 'Proses', 1),
 (2, 'Pak Jember', '2437326423', 'Jalan Merpati', '2023-11-14', 1775000, 'Proses', 1),
-(3, 'Pak Mahmud', '2437326423', 'Jalan Merpati', '2023-11-01', 0, 'Proses', 1);
+(3, 'Pak Mahmud', '2437326423', 'Jalan Merpati', '2023-11-01', 600000, 'Proses', 1);
 
 --
 -- Indexes for dumped tables
@@ -370,31 +380,31 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  MODIFY `id_detail_pesanan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_detail_pesanan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `katering`
 --
 ALTER TABLE `katering`
-  MODIFY `id_katering` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_katering` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `konfirmasi_pembayaran`
 --
 ALTER TABLE `konfirmasi_pembayaran`
-  MODIFY `id_konfirmasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_konfirmasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `langganan`
 --
 ALTER TABLE `langganan`
-  MODIFY `id_langganan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_langganan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `menu_makanan`
 --
 ALTER TABLE `menu_makanan`
-  MODIFY `id_menu` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_menu` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `pendapatan`
@@ -406,13 +416,13 @@ ALTER TABLE `pendapatan`
 -- AUTO_INCREMENT for table `penghapusan_langganan`
 --
 ALTER TABLE `penghapusan_langganan`
-  MODIFY `id_penghapusan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_penghapusan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id_pesanan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_pesanan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -422,8 +432,8 @@ ALTER TABLE `pesanan`
 -- Constraints for table `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  ADD CONSTRAINT `fk_id_menu` FOREIGN KEY (`id_menu`) REFERENCES `menu_makanan` (`id_menu`),
-  ADD CONSTRAINT `fk_id_pesanan` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`);
+  ADD CONSTRAINT `fk_id_menu` FOREIGN KEY (`id_menu`) REFERENCES `menu_makanan` (`id_menu`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_id_pesanan` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `konfirmasi_pembayaran`
